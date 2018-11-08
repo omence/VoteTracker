@@ -1,4 +1,18 @@
 img{
     display: inline-block;
   vertical-align: right;
+  margin-left: 120px;
+}
+.align {
+  display: inline-block;
+  vertical-align: right;
+}
+header {
+  text-align: center;
+}
+ul {
+  columns: 2;
+  -webkit-columns: 2;
+  -moz-columns: 2;
+  margin-left: 250px
 }
