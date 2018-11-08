@@ -61,6 +61,34 @@ function shuff() {
     document.getElementById(images[1].name).removeEventListener('click', countClicks2);
     document.getElementById(images[2].name).removeEventListener('click', countClicks3);
   }
+  function renderList() {
+    var list = document.getElementById('list');
+    for (var i = 0; i < images.length; i++) {
+      var lis = document.createElement('li');
+      lis.textContent = images[i].name + ' total votes ' + images[i].voteCounter + ' total Views ' + images[i].totalViews;
+      list.appendChild(lis);
+      document.getElementById('butt').removeEventListener('click', renderList);
+      var changeButton = document.getElementById('butt');
+      changeButton.textContent = 'Do Again';
+      changeButton.addEventListener('click', function reload() {
+        location.reload();
+      });
+
+    }
+  }
+  function makeButton() {
+    if (totalClick === 25) {
+      console.log(totalClick);
+      var container = document.getElementById('make');
+      var button = document.createElement('button');
+      button.id = ('butt');
+      button.textContent = 'show Results';
+      container.appendChild(button);
+      document.getElementById('butt').addEventListener('click', renderList);
+    }
+    
+  }
+  makeButton();
 }
 
 shuff();
@@ -111,25 +139,3 @@ function countClicks3(event) {
 document.getElementById(images[0].name).addEventListener('click', countClicks);
 document.getElementById(images[1].name).addEventListener('click', countClicks2);
 document.getElementById(images[2].name).addEventListener('click', countClicks3);
-
-function renderList() {
-  var list = document.getElementById('list');
-  for (var i = 0; i < images.length; i++) {
-    var lis = document.createElement('li');
-    lis.textContent = images[i].name + ' total votes ' + images[i].voteCounter + ' total View ' + images[i].totalViews;
-    list.appendChild(lis);
-  }
-}
-
-function makeButton() {
-  if (totalClick === 25) {
-    var container = document.getElementById('make');
-    var button = document.createElement('button');
-    button.textContent = 'show Results';
-    container.appendChild(button);
-    button.addEventListener('click', renderList);
-  }
-}
-makeButton();
-console.log(makeButton);
-
