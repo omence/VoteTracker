@@ -1,6 +1,6 @@
 'use strict';
 
-
+var imageClicks = [];
 var images = [];
 
 console.log(images);
@@ -11,8 +11,9 @@ function Product(name, src) {
   this.name = name;
   this.src = src;
   this.voteCounter = 0;
-  console.log(this.voteCounter);
+  this.totalViews = 0;
   images.push(this);
+  imageClicks.push(this.voteCounter);
 }
 
 new Product('bag', 'assets/bag.jpg');
@@ -36,6 +37,7 @@ new Product('usb', 'assets/usb.gif');
 new Product('water-can', 'assets/water-can.jpg');
 new Product('wine-glass', 'assets/wine-glass.jpg');
 
+
 function shuff() {
   var i = 0;
   var j = 0;
@@ -49,48 +51,85 @@ function shuff() {
     images[i] = images[j];
     images[j] = temp;
   }
-  if (totalClick === 25) {
-    document.getElementById('imgone').removeEventListener('click', shuff);
-    document.getElementById('imgtwo').removeEventListener('click', shuff);
-    document.getElementById('imgthree').removeEventListener('click', shuff);
-  }
   displayPics();
+  if (totalClick === 25) {
+    document.getElementById(images[0].name).removeEventListener('click', shuff);
+    document.getElementById(images[1].name).removeEventListener('click', shuff);
+    document.getElementById(images[2].name).removeEventListener('click', shuff);
+
+    document.getElementById(images[0].name).removeEventListener('click', countClicks);
+    document.getElementById(images[1].name).removeEventListener('click', countClicks2);
+    document.getElementById(images[2].name).removeEventListener('click', countClicks3);
+  }
 }
 
 shuff();
 
 function displayPics() {
-  var main = document.getElementById('container');
-  var imgOne = document.getElementById('imgone');
+  var imgOne = document.getElementsByClassName('one')[0];
   imgOne.setAttribute('src', images[0].src);
-  main.appendChild(imgOne);
+  imgOne.id = (images[0].name);
+  images[0].totalViews++;
 
-  var imgTwo = document.getElementById('imgtwo');
-  imgTwo.setAttribute('src', images[1].src);
-  main.appendChild(imgTwo);
+  var imgtw = document.getElementsByClassName('two')[0];
+  imgtw.setAttribute('src', images[1].src);
+  imgtw.id = (images[1].name);
+  images[1].totalViews++;
 
-  var imgThree = document.getElementById('imgthree');
+  var imgThree = document.getElementsByClassName('three')[0];
   imgThree.setAttribute('src', images[2].src);
-  main.appendChild(imgThree);
+  imgThree.id = (images[2].name);
+  images[2].totalViews++;
 }
 
+document.getElementById(images[0].name).addEventListener('click', shuff);
+document.getElementById(images[1].name).addEventListener('click', shuff);
+document.getElementById(images[2].name).addEventListener('click', shuff);
 
-document.getElementById('imgone').addEventListener('click', shuff);
-document.getElementById('imgtwo').addEventListener('click', shuff);
-document.getElementById('imgthree').addEventListener('click', shuff);
+function countClicks(event) {
+  var elId = event.target.id;
+  console.log(elId);
+  if (elId === images[0].name)
+    images[0].voteCounter++;
 
-document.getElementById('imgone').addEventListener('click', function() {
-  var element = document.getElementById('imgone');
-  if (element) element.innerHTML =this.voteCounter++;
+}
+function countClicks2(event) {
+  var elId = event.target.id;
+  console.log(elId);
+  if (elId === images[1].name)
+    images[1].voteCounter++;
+  
+}
+function countClicks3(event) {
+  var elId = event.target.id;
+  console.log(elId);
+  if (elId === images[2].name)
+    images[2].voteCounter++;
 
-});
+}
 
-document.getElementById('imgtwo').addEventListener('click', function() {
-  var element = document.getElementById('imgtwo');
-  if (element) element.innerHTML =this.voteCounter++;
-});
+document.getElementById(images[0].name).addEventListener('click', countClicks);
+document.getElementById(images[1].name).addEventListener('click', countClicks2);
+document.getElementById(images[2].name).addEventListener('click', countClicks3);
 
-document.getElementById('imgthree').addEventListener('click', function() {
-  var element = document.getElementById('imgtwo');
-  if (element) element.innerHTML =this.voteCounter++;
-});
+function renderList() {
+  var list = document.getElementById('list');
+  for (var i = 0; i < images.length; i++) {
+    var lis = document.createElement('li');
+    lis.textContent = images[i].name + ' total votes ' + images[i].voteCounter + ' total View ' + images[i].totalViews;
+    list.appendChild(lis);
+  }
+}
+
+function makeButton() {
+  if (totalClick === 25) {
+    var container = document.getElementById('make');
+    var button = document.createElement('button');
+    button.textContent = 'show Results';
+    container.appendChild(button);
+    button.addEventListener('click', renderList);
+  }
+}
+makeButton();
+console.log(makeButton);
+
