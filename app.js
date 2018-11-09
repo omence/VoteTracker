@@ -1,11 +1,12 @@
 'use strict';
-
-var imageClicks = [];
+var label = [];
+console.log(label);
 var images = [];
-
 console.log(images);
-
+var chartData = [];
 var totalClick = 0;
+chartData.push(Product.voteCounter);
+console.log(chartData);
 
 function Product(name, src) {
   this.name = name;
@@ -13,7 +14,7 @@ function Product(name, src) {
   this.voteCounter = 0;
   this.totalViews = 0;
   images.push(this);
-  imageClicks.push(this.voteCounter);
+  label.push(this.name);
 }
 
 new Product('bag', 'assets/bag.jpg');
@@ -37,7 +38,6 @@ new Product('usb', 'assets/usb.gif');
 new Product('water-can', 'assets/water-can.jpg');
 new Product('wine-glass', 'assets/wine-glass.jpg');
 
-
 function shuff() {
   var i = 0;
   var j = 0;
@@ -57,36 +57,88 @@ function shuff() {
     document.getElementById(images[1].name).removeEventListener('click', shuff);
     document.getElementById(images[2].name).removeEventListener('click', shuff);
 
-    document.getElementById(images[0].name).removeEventListener('click', countClicks);
-    document.getElementById(images[1].name).removeEventListener('click', countClicks2);
-    document.getElementById(images[2].name).removeEventListener('click', countClicks3);
+    document
+      .getElementById(images[0].name)
+      .removeEventListener('click', countClicks);
+    document
+      .getElementById(images[1].name)
+      .removeEventListener('click', countClicks2);
+    document
+      .getElementById(images[2].name)
+      .removeEventListener('click', countClicks3);
   }
-  function renderList() {
-    var list = document.getElementById('list');
-    for (var i = 0; i < images.length; i++) {
-      var lis = document.createElement('li');
-      lis.textContent = images[i].name + ' total votes ' + images[i].voteCounter + ' total Views ' + images[i].totalViews;
-      list.appendChild(lis);
-      document.getElementById('butt').removeEventListener('click', renderList);
-      var changeButton = document.getElementById('butt');
-      changeButton.textContent = 'Do Again';
-      changeButton.addEventListener('click', function reload() {
-        location.reload();
-      });
-
-    }
+  function renderChart() {
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var myChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: label,
+        datasets: [
+          {
+            label: '# of Votes',
+            data: chartData,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          yAxes: [
+            {
+              ticks: {
+                beginAtZero: true
+              }
+            }
+          ]
+        }
+      }
+    });
+    document.getElementById('butt').removeEventListener('click', renderChart);
+    var changeButton = document.getElementById('butt');
+    changeButton.textContent = 'Do Again';
+    changeButton.addEventListener('click', function reload() {
+      location.reload();
+    });
   }
   function makeButton() {
     if (totalClick === 25) {
       console.log(totalClick);
       var container = document.getElementById('make');
       var button = document.createElement('button');
-      button.id = ('butt');
+      button.id = 'butt';
       button.textContent = 'show Results';
       container.appendChild(button);
-      document.getElementById('butt').addEventListener('click', renderList);
+      document.getElementById('butt').addEventListener('click', renderChart);
     }
-    
   }
   makeButton();
 }
@@ -96,17 +148,17 @@ shuff();
 function displayPics() {
   var imgOne = document.getElementsByClassName('one')[0];
   imgOne.setAttribute('src', images[0].src);
-  imgOne.id = (images[0].name);
+  imgOne.id = images[0].name;
   images[0].totalViews++;
 
   var imgtw = document.getElementsByClassName('two')[0];
   imgtw.setAttribute('src', images[1].src);
-  imgtw.id = (images[1].name);
+  imgtw.id = images[1].name;
   images[1].totalViews++;
 
   var imgThree = document.getElementsByClassName('three')[0];
   imgThree.setAttribute('src', images[2].src);
-  imgThree.id = (images[2].name);
+  imgThree.id = images[2].name;
   images[2].totalViews++;
 }
 
@@ -117,23 +169,20 @@ document.getElementById(images[2].name).addEventListener('click', shuff);
 function countClicks(event) {
   var elId = event.target.id;
   console.log(elId);
-  if (elId === images[0].name)
-    images[0].voteCounter++;
-
+  if (elId === images[0].name) images[0].voteCounter++;
+  chartData.push(images[0].voteCounter);
 }
 function countClicks2(event) {
   var elId = event.target.id;
   console.log(elId);
-  if (elId === images[1].name)
-    images[1].voteCounter++;
-  
+  if (elId === images[1].name) images[1].voteCounter++;
+  chartData.push(images[1].voteCounter);
 }
 function countClicks3(event) {
   var elId = event.target.id;
   console.log(elId);
-  if (elId === images[2].name)
-    images[2].voteCounter++;
-
+  if (elId === images[2].name) images[2].voteCounter++;
+  chartData.push(images[2].voteCounter);
 }
 
 document.getElementById(images[0].name).addEventListener('click', countClicks);
