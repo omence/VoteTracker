@@ -7,6 +7,7 @@ var chartData = [];
 var totalClick = 0;
 chartData.push(Product.voteCounter);
 console.log(chartData);
+var ctx = document.getElementById("myChart").getContext('2d');
 
 function Product(name, src) {
   this.name = name;
@@ -38,6 +39,7 @@ new Product('usb', 'assets/usb.gif');
 new Product('water-can', 'assets/water-can.jpg');
 new Product('wine-glass', 'assets/wine-glass.jpg');
 
+
 function shuff() {
   var i = 0;
   var j = 0;
@@ -67,61 +69,80 @@ function shuff() {
       .getElementById(images[2].name)
       .removeEventListener('click', countClicks3);
   }
+
   function renderChart() {
-    var ctx = document.getElementById('myChart').getContext('2d');
-    var myChart = new Chart(ctx, {
+    for (var i = 0; i < images.length; i++) {
+      chartData.push(images[i].voteCounter);
+    }
+    var chartConfig = {
       type: 'bar',
       data: {
         labels: label,
-        datasets: [
-          {
-            label: '# of Votes',
-            data: chartData,
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255,99,132,1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
-          }
-        ]
+        datasets: [{
+          label: '# of Votes',
+          data: chartData,
+          backgroundColor: [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'
+          ],
+          borderColor: [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+          ],
+          borderWidth: 1
+        }]
       },
       options: {
         scales: {
-          yAxes: [
-            {
-              ticks: {
-                beginAtZero: true
-              }
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
             }
-          ]
+          }]
         }
       }
-    });
+    };
+    var myChart = new Chart(ctx, chartConfig);
+    
+    
     document.getElementById('butt').removeEventListener('click', renderChart);
     var changeButton = document.getElementById('butt');
     changeButton.textContent = 'Do Again';
@@ -131,7 +152,6 @@ function shuff() {
   }
   function makeButton() {
     if (totalClick === 25) {
-      console.log(totalClick);
       var container = document.getElementById('make');
       var button = document.createElement('button');
       button.id = 'butt';
@@ -170,19 +190,16 @@ function countClicks(event) {
   var elId = event.target.id;
   console.log(elId);
   if (elId === images[0].name) images[0].voteCounter++;
-  chartData.push(images[0].voteCounter);
 }
 function countClicks2(event) {
   var elId = event.target.id;
   console.log(elId);
   if (elId === images[1].name) images[1].voteCounter++;
-  chartData.push(images[1].voteCounter);
 }
 function countClicks3(event) {
   var elId = event.target.id;
   console.log(elId);
   if (elId === images[2].name) images[2].voteCounter++;
-  chartData.push(images[2].voteCounter);
 }
 
 document.getElementById(images[0].name).addEventListener('click', countClicks);
