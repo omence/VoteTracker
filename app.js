@@ -74,6 +74,8 @@ function shuff() {
     for (var i = 0; i < images.length; i++) {
       chartData.push(images[i].voteCounter);
     }
+    var jsonData = JSON.stringify(chartData);
+    localStorage.setItem('voteData', jsonData);
     var chartConfig = {
       type: 'bar',
       data: {
@@ -142,7 +144,13 @@ function shuff() {
     };
     var myChart = new Chart(ctx, chartConfig);
     
+    if(localStorage.getItem('voteData')) {
+      var voteData = localStorage.getItem('voteData');
+      myChart.data.datasets[0].chartData = JSON.parse(voteData);
     
+      myChart.update();
+    }
+   
     document.getElementById('butt').removeEventListener('click', renderChart);
     var changeButton = document.getElementById('butt');
     changeButton.textContent = 'Do Again';
@@ -160,7 +168,9 @@ function shuff() {
       document.getElementById('butt').addEventListener('click', renderChart);
     }
   }
+ 
   makeButton();
+  
 }
 
 shuff();
